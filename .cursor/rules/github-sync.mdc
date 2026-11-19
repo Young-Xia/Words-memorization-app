@@ -1,0 +1,6 @@
+---
+description: 完成项目修改后验证、提交并推送到 GitHub
+alwaysApply: true
+---
+
+遵循项目根目录 `AGENTS.md` 中的协作规则。完成本项目修改并验证后，自动提交并推送到 `origin`，无需再次确认上传。
