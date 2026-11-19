@@ -1,0 +1,60 @@
+{
+  "downloaded": "2026-10-20",
+  "repository": "https://github.com/kajweb/dict",
+  "files": [
+    {
+      "file": "四级_有道_正序_3739词.txt",
+      "book_id": "CET4_2",
+      "entries": 3739,
+      "unique_words": 3739,
+      "source": "https://raw.githubusercontent.com/kajweb/dict/master/book/1521164635506_CET4_2.zip",
+      "source_sha256": "ca6661bcaac6330f64054283974b199b378950b755f57c7573e4a06541b07b82",
+      "txt_sha256": "42def600641e8e3afe75d0c2357b27234812aafa96204d075463995a51e18cce"
+    },
+    {
+      "file": "四级_新东方_2607词.txt",
+      "book_id": "CET4_3",
+      "entries": 2607,
+      "unique_words": 2607,
+      "source": "https://raw.githubusercontent.com/kajweb/dict/master/book/1521164643060_CET4_3.zip",
+      "source_sha256": "2732588a69be6f97e831f47baf08fb8f91f699df01607b7cfcf346c8ad2d5f3c",
+      "txt_sha256": "720636249d9c9fdf5a5f0abd504913f649b7bec266ccf5a594557601a2fa306d"
+    },
+    {
+      "file": "六级_有道_2078词.txt",
+      "book_id": "CET6_2",
+      "entries": 2078,
+      "unique_words": 2078,
+      "source": "https://raw.githubusercontent.com/kajweb/dict/master/book/1524052554766_CET6_2.zip",
+      "source_sha256": "fe12c5a331510e86da4a187a829d9d72e2785588e60ce45d830f349c30fc3866",
+      "txt_sha256": "3809fd1180a22cb5eb58b7ce8aada9ccc60cbec832bae97b46cdff0112f215d3"
+    },
+    {
+      "file": "六级_新东方_2345词.txt",
+      "book_id": "CET6_3",
+      "entries": 2345,
+      "unique_words": 2345,
+      "source": "https://raw.githubusercontent.com/kajweb/dict/master/book/1521164633851_CET6_3.zip",
+      "source_sha256": "053bbcfecc82ca3cea7d4bcafdb0fea56c019b8e61d544fab462cd2bf72d983f",
+      "txt_sha256": "1967cacba0bc6f9df9d2e424ce3a1319700dab33c4fc8d16b50a924aa97aca54"
+    },
+    {
+      "file": "雅思_有道_正序_3427词.txt",
+      "book_id": "IELTS_2",
+      "entries": 3427,
+      "unique_words": 3427,
+      "source": "https://raw.githubusercontent.com/kajweb/dict/master/book/1521164657744_IELTS_2.zip",
+      "source_sha256": "b5cba1f4156fb06fae86f427a56532e195d325ebc3188382d986c9244770bf6c",
+      "txt_sha256": "014db28657145e55e49b8f718fb8aeed43f7f96b91a669f2529501c06ae9e5a7"
+    },
+    {
+      "file": "雅思_新东方_3575词.txt",
+      "book_id": "IELTS_3",
+      "entries": 3575,
+      "unique_words": 3575,
+      "source": "https://raw.githubusercontent.com/kajweb/dict/master/book/1521164666922_IELTS_3.zip",
+      "source_sha256": "39e1fcc46818ae8a5b2a7e79af88aed30e5330da2afaf1c3316258abade2dd13",
+      "txt_sha256": "8cac885bb6528976efec9ced00efb5fbe186428aedb36de3dd6875dd7e3bf85d"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+.tools/
+.dart_tool/
+.flutter-plugins*
+build/
+flutter-releases.json
+*.db
+*.db-shm
+*.db-wal
+*.wordsmemory.json
