@@ -14,6 +14,8 @@ import '../domain/quiz.dart';
 import '../services/import_service.dart';
 import '../services/desktop_service.dart';
 
+const _reviewPage = 2;
+
 class HomePage extends StatefulWidget {
   final AppStore store;
   final DesktopService? desktop;
@@ -44,13 +46,32 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    widget.desktop?.onOpenReview = openReview;
     guard(loadSession);
   }
 
   @override
+  void didUpdateWidget(covariant HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.desktop != widget.desktop) {
+      oldWidget.desktop?.onOpenReview = null;
+      widget.desktop?.onOpenReview = openReview;
+    }
+  }
+
+  @override
   void dispose() {
+    widget.desktop?.onOpenReview = null;
     limit.dispose();
     super.dispose();
+  }
+
+  void openReview() {
+    if (page == _reviewPage) return;
+    setState(() {
+      page = _reviewPage;
+      revealed = false;
+    });
   }
 
   Future<void> reload() async {
@@ -264,7 +285,9 @@ class _HomePageState extends State<HomePage> {
       }
       return KeyEventResult.handled;
     }
-    if (page == 2 && questions.isNotEmpty && questionIndex < questions.length) {
+    if (page == _reviewPage &&
+        questions.isNotEmpty &&
+        questionIndex < questions.length) {
       final q = questions[questionIndex];
       final index = number >= 0 ? number : letter;
       if (answer == null && index >= 0 && index < q.options.length) {
@@ -456,7 +479,7 @@ class _HomePageState extends State<HomePage> {
                             child: switch (page) {
                               0 => showingBook ? library() : bookDirectory(),
                               1 => study(),
-                              2 => quiz(),
+                              _reviewPage => quiz(),
                               3 => consolidation(),
                               _ => settings(),
                             },
@@ -849,7 +872,7 @@ class _HomePageState extends State<HomePage> {
         limit: count,
       );
       setState(() {
-        page = 2;
+        page = _reviewPage;
         quizScope = selectedScope;
         quizTitle = senseId != null
             ? '单词专项测试'

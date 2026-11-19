@@ -18,6 +18,7 @@ class DesktopService with TrayListener, WindowListener {
   bool notifications = true;
   bool ready = false;
   String? warning;
+  VoidCallback? onOpenReview;
   DesktopService(this.store);
 
   Future<void> init() async {
@@ -61,6 +62,11 @@ class DesktopService with TrayListener, WindowListener {
     await windowManager.focus();
   }
 
+  Future<void> openReview() async {
+    onOpenReview?.call();
+    await show();
+  }
+
   Future<void> checkDue({bool test = false}) async {
     if (!ready || !notifications || _checking) return;
     _checking = true;
@@ -92,9 +98,9 @@ class DesktopService with TrayListener, WindowListener {
     if (count == 0 && !test) return;
     final notice = LocalNotification(
       title: '词间 · 复习提醒',
-      body: test ? '系统通知已连接。关闭窗口后，词间会在托盘继续运行。' : '有 $count 个词义等待复习，打开词间继续学习。',
+      body: test ? '系统通知已连接。点击此通知进入考核与复习。' : '有 $count 个词义等待复习。点击此通知进入考核与复习。',
     );
-    notice.onClick = show;
+    notice.onClick = openReview;
     await notice.show();
     if (!test) {
       _lastNotice = now;

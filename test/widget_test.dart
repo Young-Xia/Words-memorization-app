@@ -6,10 +6,12 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:local_notifier/local_notifier.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:wordsmemory/data/store.dart';
 import 'package:wordsmemory/main.dart';
 import 'package:wordsmemory/domain/review.dart';
+import 'package:wordsmemory/services/desktop_service.dart';
 
 class _Paths extends PathProviderPlatform {
   final String root;
@@ -18,7 +20,78 @@ class _Paths extends PathProviderPlatform {
   Future<String?> getApplicationSupportPath() async => root;
 }
 
+class _Desktop extends DesktopService {
+  _Desktop(super.store);
+
+  int showCount = 0;
+
+  @override
+  Future<void> show() async => showCount++;
+}
+
 void main() {
+  testWidgets('clicking the system review notification opens the review page', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1000, 760);
+    tester.view.devicePixelRatio = 1;
+    final directory = (await tester.runAsync(
+      () => Directory.systemTemp.createTemp('wordsmemory-notification-'),
+    ))!;
+    final original = PathProviderPlatform.instance;
+    PathProviderPlatform.instance = _Paths(directory.path);
+    final store = AppStore.memory();
+    await tester.runAsync(store.init);
+    final desktop = _Desktop(store);
+    const channel = MethodChannel('local_notifier');
+    final messenger = tester.binding.defaultBinaryMessenger;
+    String? notificationId;
+    messenger.setMockMethodCallHandler(channel, (call) async {
+      if (call.method == 'setup') return true;
+      if (call.method == 'notify') {
+        notificationId = call.arguments['identifier'] as String;
+      }
+      return null;
+    });
+    addTearDown(() async {
+      messenger.setMockMethodCallHandler(channel, null);
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+      PathProviderPlatform.instance = original;
+      await tester.runAsync(() async {
+        await store.close();
+        await directory.delete(recursive: true);
+      });
+    });
+
+    await tester.pumpWidget(WordsApp(store: store, desktop: desktop));
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('我的词表'), findsOneWidget);
+
+    await localNotifier.setup(appName: 'WordsMemory');
+    desktop.ready = true;
+    await tester.runAsync(() => desktop.checkDue(test: true));
+    expect(notificationId, isNotNull);
+    await messenger.handlePlatformMessage(
+      channel.name,
+      const StandardMethodCodec().encodeMethodCall(
+        MethodCall('onLocalNotificationClick', {
+          'notificationId': notificationId,
+        }),
+      ),
+      null,
+    );
+    await tester.pumpAndSettle();
+
+    expect(desktop.showCount, 1);
+    expect(find.text('到期复习'), findsOneWidget);
+    expect(find.text('我的词表'), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('book directory opens, renames, and confirms deletion', (
     tester,
   ) async {
